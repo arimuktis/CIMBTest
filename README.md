@@ -1,56 +1,51 @@
 # Android Kotlin Technical Test
 
-This repository contains the completed Android Kotlin Technical Test application. It is built using modern Android development practices, including Jetpack Compose, Clean Architecture principles, MVVM, Coroutines, and StateFlow.
+Repository ini berisi hasil pengerjaan technical test Android Developer. Aplikasi dibangun menggunakan pendekatan arsitektur modern Android, yaitu MVVM, Clean Architecture, Jetpack Compose, serta Coroutines dan StateFlow untuk asynchronous dan state management.
 
-## 🚀 Features & Requirements Fulfilled
+## Requirement yang Dikerjakan
 
-1. **Active Adult Users Filter (Req 1)**
-   - Implemented in `GetActiveAdultUserNamesUseCase`.
-   - Filters users based on `isActive == true` and `age >= 18`.
-   - Results are mapped to names and sorted alphabetically.
+1. Filter Active Adult Users (Req 1)
+- Logika filtering dipisah ke dalam UseCase (GetActiveAdultUserNamesUseCase).
+- Aplikasi menyaring data user dengan kondisi isActive bernilai true dan usia minimal 18 tahun.
+- Output berupa nama user yang diurutkan secara abjad.
 
-2. **MVVM, Coroutines, and State Management (Req 2)**
-   - Leverages `ViewModel` with `viewModelScope` to ensure network/data fetching is executed on a background thread without blocking the Main Thread.
-   - Utilizes `StateFlow` to manage and observe UI States (`Loading`, `Success`, `Error`).
-   - Implemented a clean UI using Jetpack Compose that reacts dynamically to state changes.
+2. MVVM, Coroutine, dan State Management (Req 2)
+- Menggunakan ViewModel dan viewModelScope agar network request tidak melakukan blocking pada Main Thread.
+- UI direpresentasikan melalui StateFlow dengan tiga state utama: Loading, Success, dan Error.
+- Tampilan dibangun secara deklaratif menggunakan Jetpack Compose.
 
-3. **REST API Integration with Retrofit (Req 3)**
-   - API communication is handled cleanly via Retrofit (`UserApi`) and the Repository pattern (`UserRepository`).
-   - Features dynamic HTTP GET requests to fetch complete user lists and specific user details by ID.
-   - **Note:** The backend is simulated locally using Mockoon.
+3. REST API dan Retrofit (Req 3)
+- API request dikelola menggunakan Retrofit (UserApi) yang diimplementasikan di dalam layer Repository (UserRepositoryImpl).
+- Terdapat request dinamis GET /users/{id} untuk mengambil detail user.
+- Karena tidak ada real backend yang disediakan di soal, API disimulasikan secara lokal menggunakan Mockoon.
 
-4. **Search Functionality (Req 5)**
-   - Implemented in `SearchUsersUseCase`.
-   - Performs a real-time, case-insensitive search based on the user's name.
-   - Automatically resets to the full sorted list if the search keyword is blank.
+4. Fitur Pencarian (Req 5)
+- Pencarian data di-handle oleh SearchUsersUseCase.
+- Filter bersifat case-insensitive berdasarkan nama user.
+- Jika kolom pencarian kosong, data akan kembali menampilkan seluruh list yang diurutkan secara default.
 
-## 🛠️ Tech Stack
-* **Language:** Kotlin
-* **UI Toolkit:** Jetpack Compose (Material 3)
-* **Architecture:** MVVM (Model-View-ViewModel) + Clean Architecture approach (Domain, Data, Presentation layers)
-* **Concurrency:** Kotlin Coroutines & Flow (StateFlow)
-* **Networking:** Retrofit2 & OkHttp (with Logging Interceptor)
-* **Serialization:** Gson
+## Tech Stack
+- Kotlin
+- Jetpack Compose (Material 3)
+- arsitektur MVVM (Model-View-ViewModel) + Clean Architecture
+- Coroutines & Flow (StateFlow)
+- Retrofit2 & OkHttp (Logging Interceptor)
+- Gson
 
-## ⚙️ How to Run & Test the Application
+## Panduan Menjalankan Aplikasi
 
-### 1. Mockoon Setup (Local Backend)
-Since the test requires REST API integration without providing a live backend, the API is simulated locally using [Mockoon](https://mockoon.com/).
+1. Persiapan Mockoon (Simulasi Backend)
+Karena instruksi tes mengharuskan integrasi REST API, aplikasi ini bergantung pada Mockoon untuk menyimulasikan response server.
+- Install aplikasi Mockoon.
+- Import file mockoon_cimb_test.json yang ada di dalam repository ini.
+- Jalankan server di Mockoon (port 3000).
 
-1. Download and install Mockoon.
-2. Open Mockoon and click **Import/Export** > **Mockoon's format**.
-3. Import the `mockoon_cimb_test.json` file located in the root folder of this project.
-4. Click the **Play (▶️)** button in Mockoon to start the server on port `3000`.
+2. Build dan Run Android
+- Buka repository ini di Android Studio.
+- Jalankan aplikasi menggunakan Android Emulator (secara default Retrofit di-set ke localhost emulator: http://10.0.2.2:3000/).
+- Catatan: Jika ingin menggunakan physical device, pastikan mengubah BASE_URL di RetrofitInstance.kt menjadi IP address komputer lokal.
 
-### 2. Running the App
-1. Open the project in **Android Studio**.
-2. Run the application on an **Android Emulator** (the app is pre-configured to communicate with Mockoon via `http://10.0.2.2:3000/`).
-3. *If testing on a physical device via tethering/hotspot, you must change `BASE_URL` in `RetrofitInstance.kt` to your laptop's actual IP address.*
-
-### 3. Testing the Features
-* **Req 1 & 2:** The main screen automatically loads the users from the API and displays them. The top card instantly shows the filtered active adult users.
-* **Req 5:** Type any letter in the search bar to see the list filter in real-time.
-* **Req 3:** Tap on any user card in the list to trigger an API call to `GET /users/{id}`, which will display an alert dialog containing the user's detailed profile (including their email).
-
----
-*Developed as part of the Android Kotlin Technical Test.*
+3. Pengujian Fitur
+- Saat aplikasi terbuka, list user akan ditarik dari Mockoon dan langsung ter-filter di layar.
+- Untuk menguji fungsi search, ketikkan nama pada kolom input teks.
+- Untuk menguji API GET /users/{id}, tap pada salah satu card user di dalam list. Aplikasi akan memunculkan dialog berisi detail email yang ditarik secara spesifik melalui Retrofit.
